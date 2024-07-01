@@ -1,0 +1,12 @@
+Host *
+	IdentitiesOnly yes
+	ServerAliveInterval 300
+	ServerAliveCountMax 2 
+	Compression yes
+	
+Host github
+	HostName github.com
+	User git
+	IdentityFile "~/.ssh/github"
+	Port 22
+        
