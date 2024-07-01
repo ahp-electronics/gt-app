@@ -1,1 +1,0 @@
-#define GT_CONFIGURATOR_VERSION ""

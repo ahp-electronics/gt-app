@@ -1,0 +1,19 @@
+{
+  "name": "gt-app",
+  "version": "1.0.0",
+  "description": "Configuration application for the AHP® GT Controllers",
+  "main": "index.js",
+  "scripts": {
+    "test": "gt-app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ahp-electronics/gt-app.git"
+  },
+  "author": "Ilia Platone",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ahp-electronics/gt-app/issues"
+  },
+  "homepage": "https://github.com/ahp-electronics/gt-app#readme"
+}
