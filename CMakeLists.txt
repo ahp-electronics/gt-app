@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(gt-app VERSION 0.1 LANGUAGES CXX)
+project(gtapp VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -22,41 +22,46 @@ include_directories(${AHP_GT_INCLUDE_DIR})
 include_directories(${DFU_INCLUDE_DIR})
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/icon.ico ${CMAKE_CURRENT_BINARY_DIR}/icon.ico COPYONLY )
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h )
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake ${CMAKE_CURRENT_SOURCE_DIR}/config.h )
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/gt-configurator.iss.cmake ${CMAKE_CURRENT_BINARY_DIR}/gt-configurator.iss )
 
 set(PROJECT_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/mainwindow.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/mainwindow.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/threads.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/resource.qrc
+        #${CMAKE_CURRENT_SOURCE_DIR}/mainwindow.cpp
+        #${CMAKE_CURRENT_SOURCE_DIR}/mainwindow.h
+        #${CMAKE_CURRENT_SOURCE_DIR}/threads.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/gtapp/EventListModel.qml
+        ${CMAKE_CURRENT_SOURCE_DIR}/gtapp/DirectoryFontLoader.qml
+        ${CMAKE_CURRENT_SOURCE_DIR}/gtapp/Constants.qml
+        ${CMAKE_CURRENT_SOURCE_DIR}/gtapp/qmldir
+        ${CMAKE_CURRENT_SOURCE_DIR}/gtappContent/Screen01.ui.qml
+        ${CMAKE_CURRENT_SOURCE_DIR}/gtappContent/App.qml
+        ${CMAKE_CURRENT_SOURCE_DIR}/gtapp.qmlproject
         ${CMAKE_CURRENT_SOURCE_DIR}/app.rc
-        ${CMAKE_CURRENT_SOURCE_DIR}/qml.qrc
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(gt-app
+    qt_add_executable(gtapp
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
     )
 # Define target properties for Android with Qt 6 as:
-#    set_property(TARGET gt-app APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
+#    set_property(TARGET gtapp APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
 #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
 # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 else()
     if(ANDROID)
-        add_library(gt-app SHARED
+        add_library(gtapp SHARED
             ${PROJECT_SOURCES}
         )
 # Define properties for Android with Qt 5 after find_package() calls as:
 #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
-        add_executable(gt-app
+        add_executable(gtapp
           ${PROJECT_SOURCES}
         )
         if(WIN32)
-            target_link_libraries(gt-app PRIVATE comctl32)
+            target_link_libraries(gtapp PRIVATE comctl32)
             set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wl,--subsystem,windows")
             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--subsystem,windows")
             set(CMAKE_LD_FLAGS "${CMAKE_LD_FLAGS} -Wl,--subsystem,windows -static-libstdc++ -static-libgcc")
@@ -65,16 +70,16 @@ else()
     endif()
 endif()
 
-target_link_libraries(gt-app
+target_link_libraries(gtapp
   PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Quick PRIVATE ${DFU_LIBRARIES} ${AHP_GT_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${M_LIB} Qt5::Widgets Qt5::SerialPort Qt5::Network)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
 # explicit, fixed bundle identifier manually though.
 if(${QT_VERSION} VERSION_LESS 6.1.0)
-  set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.gt-app)
+  set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.gtapp)
 endif()
-set_target_properties(gt-app PROPERTIES
+set_target_properties(gtapp PROPERTIES
     ${BUNDLE_ID_OPTION}
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
@@ -83,11 +88,11 @@ set_target_properties(gt-app PROPERTIES
 )
 
 include(GNUInstallDirs)
-install(TARGETS gt-app
+install(TARGETS gtapp
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 if(QT_VERSION_MAJOR EQUAL 6)
-    qt_import_qml_plugins(gt-app)
-    qt_finalize_executable(gt-app)
+    qt_import_qml_plugins(gtapp)
+    qt_finalize_executable(gtapp)
 endif()
